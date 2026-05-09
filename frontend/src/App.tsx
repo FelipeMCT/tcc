@@ -1,0 +1,104 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import DashboardGestor from './pages/DashboardGestor';
+import GestorMissoes from './pages/GestorMissoes';
+import GestorFuncionarios from './pages/GestorFuncionarios';
+import GestorFeedbacks from './pages/GestorFeedbacks';
+import GestorRelatorios from './pages/GestorRelatorios';
+import DashboardFuncionario from './pages/DashboardFuncionario';
+import FuncionarioMissoes from './pages/FuncionarioMissoes';
+import FuncionarioHistorico from './pages/FuncionarioHistorico';
+import FuncionarioPerfil from './pages/FuncionarioPerfil';
+import FuncionarioFeedback from './pages/FuncionarioFeedback';
+import ProtectedRoute from './routes/ProtectedRoute';
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/gestor"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <DashboardGestor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gestor/missoes"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <GestorMissoes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gestor/funcionarios"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <GestorFuncionarios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gestor/feedbacks"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <GestorFeedbacks />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gestor/relatorios"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <GestorRelatorios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/funcionario"
+          element={
+            <ProtectedRoute allowedRoles={['FUNCIONARIO']}>
+              <DashboardFuncionario />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/funcionario/missoes"
+          element={
+            <ProtectedRoute allowedRoles={['FUNCIONARIO']}>
+              <FuncionarioMissoes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/funcionario/historico"
+          element={
+            <ProtectedRoute allowedRoles={['FUNCIONARIO']}>
+              <FuncionarioHistorico />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/funcionario/perfil"
+          element={
+            <ProtectedRoute allowedRoles={['FUNCIONARIO']}>
+              <FuncionarioPerfil />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/funcionario/feedback"
+          element={
+            <ProtectedRoute allowedRoles={['FUNCIONARIO']}>
+              <FuncionarioFeedback />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}

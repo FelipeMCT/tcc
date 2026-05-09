@@ -1,0 +1,1 @@
+{"version":3,"file":"get-user-level.js","sourceRoot":"","sources":["../../../../src/common/utils/get-user-level.ts"],"names":[],"mappings":";;AAAA,oCAKC;AALD,SAAgB,YAAY,CAAC,MAAc;IACzC,IAAI,MAAM,IAAI,GAAG;QAAE,OAAO,UAAU,CAAC;IACrC,IAAI,MAAM,IAAI,GAAG;QAAE,OAAO,MAAM,CAAC;IACjC,IAAI,MAAM,IAAI,GAAG;QAAE,OAAO,OAAO,CAAC;IAClC,OAAO,QAAQ,CAAC;AAClB,CAAC"}

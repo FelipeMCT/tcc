@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  GESTOR
+  FUNCIONARIO
+}
+
+model User {
+  id           Int                @id @default(autoincrement())
+  name         String
+  email        String             @unique
+  password     String
+  role         Role
+  points       Int                @default(0)
+  createdAt    DateTime           @default(now())
+  transactions PointTransaction[]
+  feedbacks    Feedback[]
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Mission {
+  id           Int                @id @default(autoincrement())
+  title        String
+  description  String
+  points       Int
+  active       Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  transactions PointTransaction[]
+}
+
+model PointTransaction {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  missionId Int
+  points    Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  mission Mission @relation(fields: [missionId], references: [id])
+}
