@@ -9,8 +9,18 @@ export declare class UsersController {
         name: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
         createdAt: Date;
     }[]>;
+    recordActivity(user: {
+        id: number;
+    }): Promise<{
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
+    }>;
     findById(id: number): Promise<{
         level: string;
         id: number;
@@ -18,6 +28,9 @@ export declare class UsersController {
         name: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
         createdAt: Date;
     } | null>;
 }

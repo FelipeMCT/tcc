@@ -8,5 +8,7 @@ export declare class RankingController {
         name: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
     }[]>;
 }

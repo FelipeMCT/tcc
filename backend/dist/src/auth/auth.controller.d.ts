@@ -11,6 +11,9 @@ export declare class AuthController {
             email: string;
             role: import("@prisma/client").$Enums.Role;
             points: number;
+            currentStreak: number;
+            longestStreak: number;
+            lastActivityDate: Date | null;
         };
     }>;
     me(user: {

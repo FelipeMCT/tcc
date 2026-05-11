@@ -9,6 +9,9 @@ export declare class UsersService {
         name: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
         createdAt: Date;
     }[]>;
     findByEmail(email: string): import("@prisma/client").Prisma.Prisma__UserClient<{
@@ -18,6 +21,9 @@ export declare class UsersService {
         password: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
         createdAt: Date;
     } | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findById(id: number): Promise<{
@@ -27,6 +33,21 @@ export declare class UsersService {
         name: string;
         role: import("@prisma/client").$Enums.Role;
         points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
+        createdAt: Date;
+    } | null>;
+    updateUserStreak(userId: number): Promise<{
+        id: number;
+        email: string;
+        name: string;
+        password: string;
+        role: import("@prisma/client").$Enums.Role;
+        points: number;
+        currentStreak: number;
+        longestStreak: number;
+        lastActivityDate: Date | null;
         createdAt: Date;
     } | null>;
 }

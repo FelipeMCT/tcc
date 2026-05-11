@@ -47,28 +47,40 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const prisma_service_1 = require("../prisma/prisma.service");
+const users_service_1 = require("../users/users.service");
 let AuthService = class AuthService {
     prisma;
     jwtService;
-    constructor(prisma, jwtService) {
+    usersService;
+    constructor(prisma, jwtService, usersService) {
         this.prisma = prisma;
         this.jwtService = jwtService;
+        this.usersService = usersService;
     }
     async login(email, password) {
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user || !(await bcrypt.compare(password, user.password))) {
             throw new common_1.UnauthorizedException('Email ou senha inválidos');
         }
+        let finalUser = user;
+        if (user.role === 'FUNCIONARIO') {
+            const updated = await this.usersService.updateUserStreak(user.id);
+            if (updated)
+                finalUser = updated;
+        }
         const payload = { sub: user.id, email: user.email, role: user.role };
         const access_token = await this.jwtService.signAsync(payload);
         return {
             access_token,
             user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                points: user.points,
+                id: finalUser.id,
+                name: finalUser.name,
+                email: finalUser.email,
+                role: finalUser.role,
+                points: finalUser.points,
+                currentStreak: finalUser.currentStreak,
+                longestStreak: finalUser.longestStreak,
+                lastActivityDate: finalUser.lastActivityDate,
             },
         };
     }
@@ -77,6 +89,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        users_service_1.UsersService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

@@ -10,6 +10,9 @@ interface User {
   role: 'GESTOR' | 'FUNCIONARIO';
   points: number;
   level: string;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivityDate: string | null;
 }
 
 interface RankingEntry {
@@ -71,15 +74,17 @@ export default function DashboardFuncionario() {
       return;
     }
 
-    Promise.all([
-      api.get<User>(`/users/${localUser.id}`),
-      api.get<RankingEntry[]>('/ranking'),
-    ])
-      .then(([userRes, rankingRes]) => {
-        setUser(userRes.data);
-        setRanking(rankingRes.data);
-      })
-      .finally(() => setLoading(false));
+    (async () => {
+      try { await api.post('/users/activity'); } catch { /* streak update silencioso */ }
+
+      const [userRes, rankingRes] = await Promise.all([
+        api.get<User>(`/users/${localUser.id}`),
+        api.get<RankingEntry[]>('/ranking'),
+      ]);
+      setUser(userRes.data);
+      setRanking(rankingRes.data);
+      setLoading(false);
+    })();
   }, [navigate]);
 
   function handleLogout() {
@@ -126,6 +131,9 @@ export default function DashboardFuncionario() {
           {' · '}
           Posição:{' '}
           <strong style={{ color: 'var(--primary)' }}>{posicao > 0 ? `#${posicao}` : '—'}</strong>
+          {' · '}
+          Sequência:{' '}
+          <strong style={{ color: '#f59e0b' }}>{user?.currentStreak ?? 0} dia{(user?.currentStreak ?? 0) !== 1 ? 's' : ''}</strong>
         </p>
 
         <div

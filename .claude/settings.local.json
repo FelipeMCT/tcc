@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npm -v)",
-      "Bash(npm create *)"
+      "Bash(npm create *)",
+      "Bash(npx prisma *)",
+      "Bash(npx tsc *)"
     ]
   }
 }

@@ -10,6 +10,9 @@ interface LoginResponse {
     email: string;
     role: 'GESTOR' | 'FUNCIONARIO';
     points: number;
+    currentStreak: number;
+    longestStreak: number;
+    lastActivityDate: string | null;
   };
 }
 

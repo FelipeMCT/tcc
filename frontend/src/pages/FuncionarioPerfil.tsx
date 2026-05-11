@@ -9,6 +9,9 @@ interface User {
   role: 'GESTOR' | 'FUNCIONARIO';
   points: number;
   level: string;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivityDate: string | null;
 }
 
 interface RankingEntry {
@@ -139,10 +142,22 @@ export default function FuncionarioPerfil() {
             <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Nível atual</span>
             <span style={{ fontWeight: 600, color: 'var(--text)' }}>{user?.level ?? '—'}</span>
           </div>
-          <div style={{ ...rowStyle, borderBottom: 'none' }}>
+          <div style={rowStyle}>
             <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Posição no ranking</span>
             <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '16px' }}>
               {posicao > 0 ? `#${posicao}` : '—'}
+            </span>
+          </div>
+          <div style={rowStyle}>
+            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Sequência atual</span>
+            <span style={{ fontWeight: 700, color: '#f59e0b', fontSize: '16px' }}>
+              {user?.currentStreak ?? 0} dia{(user?.currentStreak ?? 0) !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <div style={{ ...rowStyle, borderBottom: 'none' }}>
+            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Maior sequência</span>
+            <span style={{ fontWeight: 600, color: 'var(--text)' }}>
+              {user?.longestStreak ?? 0} dia{(user?.longestStreak ?? 0) !== 1 ? 's' : ''}
             </span>
           </div>
         </div>

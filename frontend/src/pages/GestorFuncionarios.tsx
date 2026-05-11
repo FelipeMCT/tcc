@@ -10,6 +10,9 @@ interface User {
   role: 'GESTOR' | 'FUNCIONARIO';
   points: number;
   level: string;
+  currentStreak: number;
+  longestStreak: number;
+  lastActivityDate: string | null;
 }
 
 interface RankingEntry {
@@ -41,6 +44,14 @@ const tableStyle: CSSProperties = {
   overflow: 'hidden',
   boxShadow: 'var(--shadow)',
 };
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 
 export default function GestorFuncionarios() {
   const navigate = useNavigate();
@@ -109,7 +120,7 @@ export default function GestorFuncionarios() {
 
       <main className="main-content">
         <h2 className="page-title">Funcionários</h2>
-        <p className="page-subtitle">Visualize a equipe, pontuações e níveis de gamificação.</p>
+        <p className="page-subtitle">Visualize a equipe, pontuações e sequências de acesso.</p>
 
         {error && (
           <p
@@ -138,6 +149,9 @@ export default function GestorFuncionarios() {
                     <th style={thStyle}>E-mail</th>
                     <th style={thStyle}>Nível</th>
                     <th style={thStyle}>Pontos</th>
+                    <th style={thStyle}>Sequência</th>
+                    <th style={thStyle}>Maior Seq.</th>
+                    <th style={thStyle}>Última Atividade</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -153,6 +167,15 @@ export default function GestorFuncionarios() {
                         <td style={tdStyle}>{u.level}</td>
                         <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--primary)' }}>
                           {u.points}
+                        </td>
+                        <td style={{ ...tdStyle, fontWeight: 600, color: '#f59e0b' }}>
+                          {u.currentStreak} dia{u.currentStreak !== 1 ? 's' : ''}
+                        </td>
+                        <td style={{ ...tdStyle, color: 'var(--text-muted)' }}>
+                          {u.longestStreak} dia{u.longestStreak !== 1 ? 's' : ''}
+                        </td>
+                        <td style={{ ...tdStyle, fontSize: '13px', color: 'var(--text-muted)' }}>
+                          {u.lastActivityDate ? formatDate(u.lastActivityDate) : 'Nunca acessou'}
                         </td>
                       </tr>
                     );
