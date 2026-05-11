@@ -9,66 +9,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateMissionDto = void 0;
+exports.UpdateRewardDto = void 0;
 const class_validator_1 = require("class-validator");
-class UpdateMissionDto {
+class UpdateRewardDto {
     title;
     description;
-    points;
+    cost;
+    quantity;
     active;
-    type;
-    startDate;
-    endDate;
-    bonusPercentage;
-    requiredCompletions;
 }
-exports.UpdateMissionDto = UpdateMissionDto;
+exports.UpdateRewardDto = UpdateRewardDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], UpdateMissionDto.prototype, "title", void 0);
+], UpdateRewardDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], UpdateMissionDto.prototype, "description", void 0);
+], UpdateRewardDto.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
-], UpdateMissionDto.prototype, "points", void 0);
+], UpdateRewardDto.prototype, "cost", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(0),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], UpdateRewardDto.prototype, "quantity", void 0);
 __decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
-], UpdateMissionDto.prototype, "active", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsIn)(['STANDARD', 'WEEKLY_DAILY']),
-    __metadata("design:type", String)
-], UpdateMissionDto.prototype, "type", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
-    __metadata("design:type", String)
-], UpdateMissionDto.prototype, "startDate", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
-    __metadata("design:type", String)
-], UpdateMissionDto.prototype, "endDate", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], UpdateMissionDto.prototype, "bonusPercentage", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], UpdateMissionDto.prototype, "requiredCompletions", void 0);
-//# sourceMappingURL=update-mission.dto.js.map
+], UpdateRewardDto.prototype, "active", void 0);
+//# sourceMappingURL=update-reward.dto.js.map

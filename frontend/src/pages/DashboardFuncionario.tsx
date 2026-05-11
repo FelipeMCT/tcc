@@ -351,6 +351,42 @@ export default function DashboardFuncionario() {
                   Envie sua opinião sobre a empresa
                 </div>
               </button>
+
+              {/* Recompensas */}
+              <button
+                style={cardBtnStyle}
+                onClick={() => navigate('/funcionario/recompensas')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 4px 20px rgba(99,102,241,0.18)')
+                }
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'var(--shadow)')}
+              >
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'var(--primary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    marginBottom: '10px',
+                  }}
+                >
+                  Pontos
+                </div>
+                <div
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: 'var(--text)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  Recompensas
+                </div>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                  Resgate prêmios com seus pontos
+                </div>
+              </button>
             </div>
           </div>
         </div>

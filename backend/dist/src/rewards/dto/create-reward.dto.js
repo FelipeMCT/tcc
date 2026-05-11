@@ -9,63 +9,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateMissionDto = void 0;
+exports.CreateRewardDto = void 0;
 const class_validator_1 = require("class-validator");
-class CreateMissionDto {
+class CreateRewardDto {
     title;
     description;
-    points;
+    cost;
+    quantity;
     active;
-    type;
-    startDate;
-    endDate;
-    bonusPercentage;
-    requiredCompletions;
 }
-exports.CreateMissionDto = CreateMissionDto;
+exports.CreateRewardDto = CreateRewardDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateMissionDto.prototype, "title", void 0);
+], CreateRewardDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateMissionDto.prototype, "description", void 0);
+], CreateRewardDto.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
-], CreateMissionDto.prototype, "points", void 0);
+], CreateRewardDto.prototype, "cost", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], CreateRewardDto.prototype, "quantity", void 0);
 __decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
-], CreateMissionDto.prototype, "active", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsIn)(['STANDARD', 'WEEKLY_DAILY']),
-    __metadata("design:type", String)
-], CreateMissionDto.prototype, "type", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
-    __metadata("design:type", String)
-], CreateMissionDto.prototype, "startDate", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
-    __metadata("design:type", String)
-], CreateMissionDto.prototype, "endDate", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateMissionDto.prototype, "bonusPercentage", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateMissionDto.prototype, "requiredCompletions", void 0);
-//# sourceMappingURL=create-mission.dto.js.map
+], CreateRewardDto.prototype, "active", void 0);
+//# sourceMappingURL=create-reward.dto.js.map

@@ -10,6 +10,7 @@ import { PointsModule } from './points/points.module';
 import { RankingModule } from './ranking/ranking.module';
 import { FeedbacksModule } from './feedbacks/feedbacks.module';
 import { ReportsModule } from './reports/reports.module';
+import { RewardsModule } from './rewards/rewards.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ReportsModule } from './reports/reports.module';
     RankingModule,
     FeedbacksModule,
     ReportsModule,
+    RewardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

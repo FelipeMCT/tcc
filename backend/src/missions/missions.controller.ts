@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { MissionsService } from './missions.service';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('missions')
 export class MissionsController {
@@ -18,6 +29,13 @@ export class MissionsController {
   @Get('active')
   findActive() {
     return this.missionsService.findActive();
+  }
+
+  @Get('my-progress')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('FUNCIONARIO')
+  getMyProgress(@CurrentUser() user: { id: number }) {
+    return this.missionsService.getMyProgress(user.id);
   }
 
   @Post()

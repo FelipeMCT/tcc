@@ -273,6 +273,37 @@ export default function DashboardGestor() {
                   Participação e desempenho da equipe
                 </div>
               </button>
+
+              {/* Recompensas */}
+              <button
+                style={cardBtnStyle}
+                onClick={() => navigate('/gestor/recompensas')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 4px 20px rgba(99,102,241,0.18)')
+                }
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'var(--shadow)')}
+              >
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'var(--primary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    marginBottom: '10px',
+                  }}
+                >
+                  Gerenciar
+                </div>
+                <div
+                  style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}
+                >
+                  Recompensas
+                </div>
+                <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                  Criar e gerenciar prêmios para resgate
+                </div>
+              </button>
             </div>
           </div>
         </div>

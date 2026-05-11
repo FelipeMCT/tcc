@@ -11,16 +11,45 @@ enum Role {
   FUNCIONARIO
 }
 
+enum MissionType {
+  STANDARD
+  WEEKLY_DAILY
+}
+
 model User {
-  id           Int                @id @default(autoincrement())
-  name         String
-  email        String             @unique
-  password     String
-  role         Role
-  points       Int                @default(0)
-  createdAt    DateTime           @default(now())
-  transactions PointTransaction[]
-  feedbacks    Feedback[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String             @unique
+  password          String
+  role              Role
+  points            Int                @default(0)
+  createdAt         DateTime           @default(now())
+  transactions      PointTransaction[]
+  feedbacks         Feedback[]
+  rewardRedemptions RewardRedemption[]
+  missionBonuses    MissionBonus[]
+}
+
+model Reward {
+  id          Int                @id @default(autoincrement())
+  title       String
+  description String
+  cost        Int
+  quantity    Int
+  active      Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  redemptions RewardRedemption[]
+}
+
+model RewardRedemption {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  rewardId  Int
+  cost      Int
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  reward Reward @relation(fields: [rewardId], references: [id])
 }
 
 model Feedback {
@@ -34,13 +63,30 @@ model Feedback {
 }
 
 model Mission {
-  id           Int                @id @default(autoincrement())
-  title        String
-  description  String
-  points       Int
-  active       Boolean            @default(true)
-  createdAt    DateTime           @default(now())
-  transactions PointTransaction[]
+  id                  Int                @id @default(autoincrement())
+  title               String
+  description         String
+  points              Int
+  active              Boolean            @default(true)
+  type                MissionType        @default(STANDARD)
+  startDate           DateTime?
+  endDate             DateTime?
+  bonusPercentage     Int?
+  requiredCompletions Int?
+  createdAt           DateTime           @default(now())
+  transactions        PointTransaction[]
+  bonuses             MissionBonus[]
+}
+
+model MissionBonus {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  missionId Int
+  points    Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  mission Mission @relation(fields: [missionId], references: [id])
 }
 
 model PointTransaction {

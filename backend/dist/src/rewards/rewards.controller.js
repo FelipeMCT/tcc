@@ -12,73 +12,77 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MissionsController = void 0;
+exports.RewardsController = void 0;
 const common_1 = require("@nestjs/common");
-const missions_service_1 = require("./missions.service");
-const create_mission_dto_1 = require("./dto/create-mission.dto");
-const update_mission_dto_1 = require("./dto/update-mission.dto");
+const rewards_service_1 = require("./rewards.service");
+const create_reward_dto_1 = require("./dto/create-reward.dto");
+const update_reward_dto_1 = require("./dto/update-reward.dto");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const current_user_decorator_1 = require("../auth/decorators/current-user.decorator");
-let MissionsController = class MissionsController {
-    missionsService;
-    constructor(missionsService) {
-        this.missionsService = missionsService;
+let RewardsController = class RewardsController {
+    rewardsService;
+    constructor(rewardsService) {
+        this.rewardsService = rewardsService;
     }
     findAll() {
-        return this.missionsService.findAll();
+        return this.rewardsService.findAll();
     }
     findActive() {
-        return this.missionsService.findActive();
+        return this.rewardsService.findActive();
     }
-    getMyProgress(user) {
-        return this.missionsService.getMyProgress(user.id);
+    getMyRedemptions(user) {
+        return this.rewardsService.getMyRedemptions(user.id);
     }
-    create(createMissionDto) {
-        return this.missionsService.create(createMissionDto);
+    create(dto) {
+        return this.rewardsService.create(dto);
     }
-    update(id, updateMissionDto) {
-        return this.missionsService.update(id, updateMissionDto);
+    update(id, dto) {
+        return this.rewardsService.update(id, dto);
     }
     toggleActive(id) {
-        return this.missionsService.toggleActive(id);
+        return this.rewardsService.toggleActive(id);
     }
-    remove(id) {
-        return this.missionsService.remove(id);
+    redeem(user, rewardId) {
+        return this.rewardsService.redeem(user.id, rewardId);
     }
 };
-exports.MissionsController = MissionsController;
+exports.RewardsController = RewardsController;
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('GESTOR'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "findAll", null);
+], RewardsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('active'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('FUNCIONARIO'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "findActive", null);
+], RewardsController.prototype, "findActive", null);
 __decorate([
-    (0, common_1.Get)('my-progress'),
+    (0, common_1.Get)('my-redemptions'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('FUNCIONARIO'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "getMyProgress", null);
+], RewardsController.prototype, "getMyRedemptions", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('GESTOR'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_mission_dto_1.CreateMissionDto]),
+    __metadata("design:paramtypes", [create_reward_dto_1.CreateRewardDto]),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "create", null);
+], RewardsController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
@@ -86,9 +90,9 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_mission_dto_1.UpdateMissionDto]),
+    __metadata("design:paramtypes", [Number, update_reward_dto_1.UpdateRewardDto]),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "update", null);
+], RewardsController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/toggle-active'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
@@ -97,18 +101,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "toggleActive", null);
+], RewardsController.prototype, "toggleActive", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Post)(':id/redeem'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('GESTOR'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    (0, roles_decorator_1.Roles)('FUNCIONARIO'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", void 0)
-], MissionsController.prototype, "remove", null);
-exports.MissionsController = MissionsController = __decorate([
-    (0, common_1.Controller)('missions'),
-    __metadata("design:paramtypes", [missions_service_1.MissionsService])
-], MissionsController);
-//# sourceMappingURL=missions.controller.js.map
+], RewardsController.prototype, "redeem", null);
+exports.RewardsController = RewardsController = __decorate([
+    (0, common_1.Controller)('rewards'),
+    __metadata("design:paramtypes", [rewards_service_1.RewardsService])
+], RewardsController);
+//# sourceMappingURL=rewards.controller.js.map

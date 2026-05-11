@@ -9,7 +9,21 @@ export declare class PointsService {
             title: string;
         };
         pointsEarned: number;
-        totalPoints: number;
+        bonusEarned: number;
+        totalUserPoints: number;
+        completions: number;
+        requiredCompletions: null;
+    } | {
+        message: string;
+        mission: {
+            id: number;
+            title: string;
+        };
+        pointsEarned: number;
+        bonusEarned: number;
+        totalUserPoints: number;
+        completions: number;
+        requiredCompletions: number;
     }>;
     getMyHistory(userId: number): import("@prisma/client").Prisma.PrismaPromise<{
         id: number;

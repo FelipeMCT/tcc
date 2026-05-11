@@ -19,6 +19,7 @@ const points_module_1 = require("./points/points.module");
 const ranking_module_1 = require("./ranking/ranking.module");
 const feedbacks_module_1 = require("./feedbacks/feedbacks.module");
 const reports_module_1 = require("./reports/reports.module");
+const rewards_module_1 = require("./rewards/rewards.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,6 +35,7 @@ exports.AppModule = AppModule = __decorate([
             ranking_module_1.RankingModule,
             feedbacks_module_1.FeedbacksModule,
             reports_module_1.ReportsModule,
+            rewards_module_1.RewardsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

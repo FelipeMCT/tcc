@@ -9,6 +9,11 @@ interface Mission {
   description: string;
   points: number;
   active: boolean;
+  type: 'STANDARD' | 'WEEKLY_DAILY';
+  startDate: string | null;
+  endDate: string | null;
+  bonusPercentage: number | null;
+  requiredCompletions: number | null;
 }
 
 const thStyle: CSSProperties = {
@@ -36,6 +41,14 @@ const tableStyle: CSSProperties = {
   boxShadow: 'var(--shadow)',
 };
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+
 export default function GestorMissoes() {
   const navigate = useNavigate();
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -47,6 +60,9 @@ export default function GestorMissoes() {
   const [formDescription, setFormDescription] = useState('');
   const [formPoints, setFormPoints] = useState('');
   const [formActive, setFormActive] = useState(true);
+  const [formType, setFormType] = useState<'STANDARD' | 'WEEKLY_DAILY'>('STANDARD');
+  const [formStartDate, setFormStartDate] = useState('');
+  const [formEndDate, setFormEndDate] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
@@ -61,12 +77,21 @@ export default function GestorMissoes() {
       .finally(() => setLoading(false));
   }, []);
 
+  function handleTypeChange(newType: 'STANDARD' | 'WEEKLY_DAILY') {
+    setFormType(newType);
+    setFormStartDate('');
+    setFormEndDate('');
+  }
+
   function handleEditClick(m: Mission) {
     setEditingId(m.id);
     setFormTitle(m.title);
     setFormDescription(m.description);
     setFormPoints(String(m.points));
     setFormActive(m.active);
+    setFormType(m.type);
+    setFormStartDate(m.startDate ? m.startDate.slice(0, 10) : '');
+    setFormEndDate(m.endDate ? m.endDate.slice(0, 10) : '');
     setFormError('');
     setFormSuccess('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -78,6 +103,9 @@ export default function GestorMissoes() {
     setFormDescription('');
     setFormPoints('');
     setFormActive(true);
+    setFormType('STANDARD');
+    setFormStartDate('');
+    setFormEndDate('');
     setFormError('');
     setFormSuccess('');
   }
@@ -96,26 +124,30 @@ export default function GestorMissoes() {
       setFormError('Pontos deve ser um número maior que 0.');
       return;
     }
+    if (formType === 'WEEKLY_DAILY' && !formStartDate) {
+      setFormError('Data de início é obrigatória para missões semanais.');
+      return;
+    }
 
     setSubmitting(true);
     try {
+      const payload: Record<string, unknown> = {
+        title: formTitle.trim(),
+        description: formDescription.trim(),
+        points,
+        active: formActive,
+        type: formType,
+      };
+      if (formStartDate) payload.startDate = formStartDate;
+      if (formEndDate) payload.endDate = formEndDate;
+
       if (editingId !== null) {
-        const { data: updated } = await api.patch<Mission>(`/missions/${editingId}`, {
-          title: formTitle.trim(),
-          description: formDescription.trim(),
-          points,
-          active: formActive,
-        });
+        const { data: updated } = await api.patch<Mission>(`/missions/${editingId}`, payload);
         setMissions((prev) => prev.map((m) => (m.id === updated.id ? updated : m)));
         setFormSuccess(`Missão "${updated.title}" atualizada com sucesso!`);
         setEditingId(null);
       } else {
-        const { data: created } = await api.post<Mission>('/missions', {
-          title: formTitle.trim(),
-          description: formDescription.trim(),
-          points,
-          active: formActive,
-        });
+        const { data: created } = await api.post<Mission>('/missions', payload);
         setMissions((prev) => [...prev, created]);
         setFormSuccess(`Missão "${created.title}" criada com sucesso!`);
       }
@@ -123,6 +155,9 @@ export default function GestorMissoes() {
       setFormDescription('');
       setFormPoints('');
       setFormActive(true);
+      setFormType('STANDARD');
+      setFormStartDate('');
+      setFormEndDate('');
     } catch {
       setFormError(
         editingId !== null
@@ -173,6 +208,16 @@ export default function GestorMissoes() {
     );
   }
 
+  const labelStyle: CSSProperties = {
+    display: 'block',
+    fontSize: '12px',
+    fontWeight: 600,
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    marginBottom: '6px',
+  };
+
   return (
     <div className="page">
       <header className="header">
@@ -203,12 +248,7 @@ export default function GestorMissoes() {
         {error && (
           <p
             className="notice"
-            style={{
-              background: '#fee2e2',
-              borderColor: '#fca5a5',
-              color: '#991b1b',
-              marginBottom: '24px',
-            }}
+            style={{ background: '#fee2e2', borderColor: '#fca5a5', color: '#991b1b', marginBottom: '24px' }}
           >
             {error}
           </p>
@@ -226,18 +266,13 @@ export default function GestorMissoes() {
               borderRadius: 'var(--radius)',
               padding: '24px',
               boxShadow: 'var(--shadow)',
-              maxWidth: '560px',
+              maxWidth: '640px',
             }}
           >
             {formError && (
               <p
                 className="notice"
-                style={{
-                  background: '#fee2e2',
-                  borderColor: '#fca5a5',
-                  color: '#991b1b',
-                  marginBottom: '16px',
-                }}
+                style={{ background: '#fee2e2', borderColor: '#fca5a5', color: '#991b1b', marginBottom: '16px' }}
               >
                 {formError}
               </p>
@@ -245,12 +280,7 @@ export default function GestorMissoes() {
             {formSuccess && (
               <p
                 className="notice"
-                style={{
-                  background: '#dcfce7',
-                  borderColor: '#86efac',
-                  color: '#15803d',
-                  marginBottom: '16px',
-                }}
+                style={{ background: '#dcfce7', borderColor: '#86efac', color: '#15803d', marginBottom: '16px' }}
               >
                 {formSuccess}
               </p>
@@ -259,6 +289,53 @@ export default function GestorMissoes() {
               onSubmit={handleSubmitMission}
               style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
             >
+              {/* Tipo de missão */}
+              <div>
+                <label style={labelStyle}>Tipo de missão</label>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  {(['STANDARD', 'WEEKLY_DAILY'] as const).map((t) => (
+                    <label
+                      key={t}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '14px',
+                        cursor: submitting ? 'not-allowed' : 'pointer',
+                        fontWeight: formType === t ? 600 : 400,
+                        color: formType === t ? 'var(--primary)' : 'var(--text)',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="missionType"
+                        value={t}
+                        checked={formType === t}
+                        onChange={() => handleTypeChange(t)}
+                        disabled={submitting}
+                      />
+                      {t === 'STANDARD' ? 'Missão padrão' : 'Missão semanal diária'}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {formType === 'WEEKLY_DAILY' && (
+                <div
+                  style={{
+                    padding: '12px 14px',
+                    background: '#eff6ff',
+                    borderRadius: 'var(--radius)',
+                    fontSize: '13px',
+                    color: '#1e40af',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  O funcionário pode concluir 1 vez por dia durante 7 dias. Ao completar os 7 dias,
+                  recebe bônus de 25% sobre o total de pontos da missão.
+                </div>
+              )}
+
               <div className="form-group">
                 <label htmlFor="mission-title">Título</label>
                 <input
@@ -284,7 +361,9 @@ export default function GestorMissoes() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="mission-points">Pontos</label>
+                <label htmlFor="mission-points">
+                  {formType === 'WEEKLY_DAILY' ? 'Pontos por dia' : 'Pontos'}
+                </label>
                 <input
                   id="mission-points"
                   type="number"
@@ -295,6 +374,52 @@ export default function GestorMissoes() {
                   disabled={submitting}
                 />
               </div>
+
+              {formType === 'WEEKLY_DAILY' && (
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <div className="form-group" style={{ flex: 1, minWidth: '160px' }}>
+                    <label htmlFor="mission-start">Data de início *</label>
+                    <input
+                      id="mission-start"
+                      type="date"
+                      value={formStartDate}
+                      onChange={(e) => setFormStartDate(e.target.value)}
+                      disabled={submitting}
+                    />
+                  </div>
+                  <div className="form-group" style={{ flex: 1, minWidth: '160px' }}>
+                    <label htmlFor="mission-end">
+                      Data final{' '}
+                      <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>
+                        (auto: início + 7 dias)
+                      </span>
+                    </label>
+                    <input
+                      id="mission-end"
+                      type="date"
+                      value={formEndDate}
+                      onChange={(e) => setFormEndDate(e.target.value)}
+                      disabled={submitting}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {formType === 'STANDARD' && (
+                <div className="form-group">
+                  <label htmlFor="mission-deadline">
+                    Prazo final{' '}
+                    <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>(opcional)</span>
+                  </label>
+                  <input
+                    id="mission-deadline"
+                    type="date"
+                    value={formEndDate}
+                    onChange={(e) => setFormEndDate(e.target.value)}
+                    disabled={submitting}
+                  />
+                </div>
+              )}
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <input
@@ -350,7 +475,9 @@ export default function GestorMissoes() {
 
         {/* Tabela de missões */}
         <section style={{ marginTop: '40px', marginBottom: '40px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>Missões Cadastradas</h3>
+          <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>
+            Missões Cadastradas
+          </h3>
           {missions.length === 0 ? (
             <p style={{ color: 'var(--text-muted)' }}>Nenhuma missão cadastrada.</p>
           ) : (
@@ -360,7 +487,9 @@ export default function GestorMissoes() {
                   <tr style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
                     <th style={thStyle}>Título</th>
                     <th style={thStyle}>Descrição</th>
+                    <th style={thStyle}>Tipo</th>
                     <th style={thStyle}>Pontos</th>
+                    <th style={thStyle}>Período / Prazo</th>
                     <th style={thStyle}>Status</th>
                     <th style={thStyle}>Ações</th>
                   </tr>
@@ -370,7 +499,33 @@ export default function GestorMissoes() {
                     <tr key={m.id} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={tdStyle}>{m.title}</td>
                       <td style={tdStyle}>{m.description}</td>
-                      <td style={tdStyle}>{m.points}</td>
+                      <td style={tdStyle}>
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            padding: '2px 7px',
+                            borderRadius: '99px',
+                            background: m.type === 'WEEKLY_DAILY' ? '#ede9fe' : '#f1f5f9',
+                            color: m.type === 'WEEKLY_DAILY' ? '#6d28d9' : 'var(--text-muted)',
+                          }}
+                        >
+                          {m.type === 'WEEKLY_DAILY' ? 'Semanal' : 'Padrão'}
+                        </span>
+                      </td>
+                      <td style={tdStyle}>
+                        {m.points}
+                        {m.type === 'WEEKLY_DAILY' && (
+                          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>/dia</span>
+                        )}
+                      </td>
+                      <td style={{ ...tdStyle, fontSize: '13px', color: 'var(--text-muted)' }}>
+                        {m.startDate && m.endDate
+                          ? `${formatDate(m.startDate)} → ${formatDate(m.endDate)}`
+                          : m.endDate
+                            ? `Até ${formatDate(m.endDate)}`
+                            : '—'}
+                      </td>
                       <td style={tdStyle}>
                         <span
                           style={{

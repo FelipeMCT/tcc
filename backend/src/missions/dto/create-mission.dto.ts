@@ -1,4 +1,13 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class CreateMissionDto {
   @IsString()
@@ -16,4 +25,24 @@ export class CreateMissionDto {
   @IsBoolean()
   @IsOptional()
   active?: boolean;
+
+  @IsOptional()
+  @IsIn(['STANDARD', 'WEEKLY_DAILY'])
+  type?: 'STANDARD' | 'WEEKLY_DAILY';
+
+  @IsOptional()
+  @IsDateString()
+  startDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
+
+  @IsOptional()
+  @IsNumber()
+  bonusPercentage?: number;
+
+  @IsOptional()
+  @IsNumber()
+  requiredCompletions?: number;
 }

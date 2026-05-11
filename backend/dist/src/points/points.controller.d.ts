@@ -23,6 +23,20 @@ export declare class PointsController {
             title: string;
         };
         pointsEarned: number;
-        totalPoints: number;
+        bonusEarned: number;
+        totalUserPoints: number;
+        completions: number;
+        requiredCompletions: null;
+    } | {
+        message: string;
+        mission: {
+            id: number;
+            title: string;
+        };
+        pointsEarned: number;
+        bonusEarned: number;
+        totalUserPoints: number;
+        completions: number;
+        requiredCompletions: number;
     }>;
 }
