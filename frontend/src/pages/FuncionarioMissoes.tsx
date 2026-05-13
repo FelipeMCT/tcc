@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import type { AxiosError } from 'axios';
+import CongratulationsEffect from '../components/CongratulationsEffect';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -87,6 +88,7 @@ export default function FuncionarioMissoes() {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [completing, setCompleting] = useState<number | null>(null);
+  const [congrats, setCongrats] = useState({ show: false, title: '', message: '' });
 
   const localUser = JSON.parse(localStorage.getItem('user') ?? 'null') as { id: number } | null;
 
@@ -131,10 +133,20 @@ export default function FuncionarioMissoes() {
         setSuccessMsg(
           `${data.message} +${data.pointsEarned} + ${data.bonusEarned} pts bônus. Total: ${data.totalUserPoints} pts.`,
         );
+        setCongrats({
+          show: true,
+          title: 'Missão concluída!',
+          message: `Parabéns! Você concluiu a missão e ganhou pontos.\nVocê ganhou ${data.pointsEarned} pontos. Você também ganhou bônus de ${data.bonusEarned} pontos!`,
+        });
       } else {
         setSuccessMsg(
           `"${missionTitle}" concluída! +${data.pointsEarned} pontos. Total: ${data.totalUserPoints} pontos.`,
         );
+        setCongrats({
+          show: true,
+          title: 'Missão concluída!',
+          message: `Parabéns! Você concluiu a missão e ganhou ${data.pointsEarned} pontos.`,
+        });
       }
       await refreshData();
     } catch (err) {
@@ -486,6 +498,12 @@ export default function FuncionarioMissoes() {
           </p>
         )}
       </main>
+      <CongratulationsEffect
+        show={congrats.show}
+        title={congrats.title}
+        message={congrats.message}
+        onClose={() => setCongrats((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 }

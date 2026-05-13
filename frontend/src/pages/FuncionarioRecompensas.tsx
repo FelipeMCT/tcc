@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import type { AxiosError } from 'axios';
+import CongratulationsEffect from '../components/CongratulationsEffect';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -70,6 +71,7 @@ export default function FuncionarioRecompensas() {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [redeeming, setRedeeming] = useState<number | null>(null);
+  const [congrats, setCongrats] = useState({ show: false, title: '', message: '' });
 
   const localUser = JSON.parse(localStorage.getItem('user') ?? 'null') as { id: number } | null;
 
@@ -109,6 +111,11 @@ export default function FuncionarioRecompensas() {
     try {
       const { data } = await api.post<RedeemResponse>(`/rewards/${reward.id}/redeem`);
       setSuccessMsg(`"${data.reward.title}" resgatada! −${data.cost} pontos. Saldo: ${data.remainingPoints} pontos.`);
+      setCongrats({
+        show: true,
+        title: 'Recompensa resgatada!',
+        message: `Parabéns! Você resgatou "${data.reward.title}" com sucesso.\nSeus pontos foram atualizados. Saldo atual: ${data.remainingPoints} pontos.`,
+      });
       setUser((prev) => (prev ? { ...prev, points: data.remainingPoints } : prev));
       await refreshData();
     } catch (err) {
@@ -293,6 +300,12 @@ export default function FuncionarioRecompensas() {
           )}
         </section>
       </main>
+      <CongratulationsEffect
+        show={congrats.show}
+        title={congrats.title}
+        message={congrats.message}
+        onClose={() => setCongrats((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 }
