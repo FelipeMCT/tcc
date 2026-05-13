@@ -6,6 +6,7 @@ import GestorFuncionarios from './pages/GestorFuncionarios';
 import GestorFeedbacks from './pages/GestorFeedbacks';
 import GestorRelatorios from './pages/GestorRelatorios';
 import GestorRecompensas from './pages/GestorRecompensas';
+import GestorSuporte from './pages/GestorSuporte';
 import FuncionarioRecompensas from './pages/FuncionarioRecompensas';
 import DashboardFuncionario from './pages/DashboardFuncionario';
 import FuncionarioMissoes from './pages/FuncionarioMissoes';
@@ -65,6 +66,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['GESTOR']}>
               <GestorRecompensas />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gestor/suporte"
+          element={
+            <ProtectedRoute allowedRoles={['GESTOR']}>
+              <GestorSuporte />
             </ProtectedRoute>
           }
         />
