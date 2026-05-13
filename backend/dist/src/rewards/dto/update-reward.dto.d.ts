@@ -4,4 +4,5 @@ export declare class UpdateRewardDto {
     cost?: number;
     quantity?: number;
     active?: boolean;
+    allowMultipleRedemptions?: boolean;
 }

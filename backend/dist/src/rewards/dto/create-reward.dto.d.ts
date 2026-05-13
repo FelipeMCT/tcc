@@ -4,4 +4,5 @@ export declare class CreateRewardDto {
     cost: number;
     quantity: number;
     active?: boolean;
+    allowMultipleRedemptions?: boolean;
 }

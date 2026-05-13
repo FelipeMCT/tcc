@@ -12,6 +12,7 @@ export declare class RewardsService {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findAll(): Promise<{
         redeemed: number;
@@ -23,6 +24,7 @@ export declare class RewardsService {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }[]>;
     findActive(): Promise<{
         redeemed: number;
@@ -34,6 +36,7 @@ export declare class RewardsService {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }[]>;
     update(id: number, dto: UpdateRewardDto): Promise<{
         id: number;
@@ -43,6 +46,7 @@ export declare class RewardsService {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }>;
     toggleActive(id: number): Promise<{
         id: number;
@@ -52,6 +56,7 @@ export declare class RewardsService {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }>;
     redeem(userId: number, rewardId: number): Promise<{
         message: string;

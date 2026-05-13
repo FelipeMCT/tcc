@@ -34,14 +34,15 @@ model User {
 }
 
 model Reward {
-  id          Int                @id @default(autoincrement())
-  title       String
-  description String
-  cost        Int
-  quantity    Int
-  active      Boolean            @default(true)
-  createdAt   DateTime           @default(now())
-  redemptions RewardRedemption[]
+  id                       Int                @id @default(autoincrement())
+  title                    String
+  description              String
+  cost                     Int
+  quantity                 Int
+  active                   Boolean            @default(true)
+  allowMultipleRedemptions Boolean            @default(false)
+  createdAt                DateTime           @default(now())
+  redemptions              RewardRedemption[]
 }
 
 model RewardRedemption {

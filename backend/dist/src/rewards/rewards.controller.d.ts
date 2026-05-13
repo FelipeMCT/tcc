@@ -14,6 +14,7 @@ export declare class RewardsController {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }[]>;
     findActive(): Promise<{
         redeemed: number;
@@ -25,6 +26,7 @@ export declare class RewardsController {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }[]>;
     getMyRedemptions(user: {
         id: number;
@@ -49,6 +51,7 @@ export declare class RewardsController {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: number, dto: UpdateRewardDto): Promise<{
         id: number;
@@ -58,6 +61,7 @@ export declare class RewardsController {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }>;
     toggleActive(id: number): Promise<{
         id: number;
@@ -67,6 +71,7 @@ export declare class RewardsController {
         active: boolean;
         cost: number;
         quantity: number;
+        allowMultipleRedemptions: boolean;
     }>;
     redeem(user: {
         id: number;

@@ -15,6 +15,7 @@ export class RewardsService {
         cost: dto.cost,
         quantity: dto.quantity,
         active: dto.active ?? true,
+        allowMultipleRedemptions: dto.allowMultipleRedemptions ?? false,
       },
     });
   }
@@ -71,6 +72,15 @@ export class RewardsService {
     const reward = await this.prisma.reward.findUnique({ where: { id: rewardId } });
     if (!reward) throw new NotFoundException('Recompensa não encontrada.');
     if (!reward.active) throw new BadRequestException('Recompensa não está ativa.');
+
+    if (!reward.allowMultipleRedemptions) {
+      const alreadyRedeemed = await this.prisma.rewardRedemption.findFirst({
+        where: { userId, rewardId },
+      });
+      if (alreadyRedeemed) {
+        throw new BadRequestException('Você já resgatou esta recompensa.');
+      }
+    }
 
     const redeemed = await this.prisma.rewardRedemption.count({ where: { rewardId } });
     if (redeemed >= reward.quantity) throw new BadRequestException('Recompensa esgotada.');

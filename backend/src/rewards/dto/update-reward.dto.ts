@@ -24,4 +24,8 @@ export class UpdateRewardDto {
   @IsBoolean()
   @IsOptional()
   active?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  allowMultipleRedemptions?: boolean;
 }

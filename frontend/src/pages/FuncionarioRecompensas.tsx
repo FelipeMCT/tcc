@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import type { AxiosError } from 'axios';
-import CongratulationsEffect from '../components/CongratulationsEffect';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import CongratulationsEffect from '../components/CongratulationsEffect';
 
 interface User {
   id: number;
@@ -19,6 +19,7 @@ interface ActiveReward {
   cost: number;
   quantity: number;
   active: boolean;
+  allowMultipleRedemptions: boolean;
   remaining: number;
   redeemed: number;
 }
@@ -141,6 +142,8 @@ export default function FuncionarioRecompensas() {
     );
   }
 
+  const redeemedRewardIds = new Set(redemptions.map((rd) => rd.reward.id));
+
   return (
     <div className="page">
       <header className="header">
@@ -209,13 +212,15 @@ export default function FuncionarioRecompensas() {
                     const isRedeeming = redeeming === r.id;
                     const busy = redeeming !== null;
                     const esgotado = r.remaining === 0;
+                    const alreadyRedeemed = !r.allowMultipleRedemptions && redeemedRewardIds.has(r.id);
 
                     let btnLabel = 'Resgatar';
                     if (isRedeeming) btnLabel = 'Resgatando...';
+                    else if (alreadyRedeemed) btnLabel = 'Você já resgatou';
                     else if (esgotado) btnLabel = 'Esgotado';
                     else if (!hasPoints) btnLabel = 'Pontos insuficientes';
 
-                    const canRedeem = hasPoints && !esgotado && !busy;
+                    const canRedeem = hasPoints && !esgotado && !busy && !alreadyRedeemed;
 
                     return (
                       <tr key={r.id} style={{ borderBottom: '1px solid var(--border)' }}>
@@ -235,12 +240,12 @@ export default function FuncionarioRecompensas() {
                             style={{
                               fontSize: '13px',
                               padding: '6px 14px',
-                              background: esgotado
+                              background: esgotado || alreadyRedeemed
                                 ? 'var(--text-muted)'
                                 : !hasPoints
                                   ? '#fee2e2'
                                   : 'var(--primary)',
-                              color: (!hasPoints && !esgotado) ? '#991b1b' : '#fff',
+                              color: (!hasPoints && !esgotado && !alreadyRedeemed) ? '#991b1b' : '#fff',
                               opacity: !canRedeem && !isRedeeming ? 0.65 : 1,
                               cursor: canRedeem ? 'pointer' : 'not-allowed',
                             }}

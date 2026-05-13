@@ -11,6 +11,7 @@ interface Reward {
   cost: number;
   quantity: number;
   active: boolean;
+  allowMultipleRedemptions: boolean;
   createdAt: string;
   redeemed: number;
   remaining: number;
@@ -57,6 +58,7 @@ export default function GestorRecompensas() {
   const [formCost, setFormCost] = useState('');
   const [formQuantity, setFormQuantity] = useState('');
   const [formActive, setFormActive] = useState(true);
+  const [formAllowMultiple, setFormAllowMultiple] = useState(false);
 
   async function loadRewards() {
     const res = await api.get<Reward[]>('/rewards');
@@ -76,6 +78,7 @@ export default function GestorRecompensas() {
     setFormCost(String(r.cost));
     setFormQuantity(String(r.quantity));
     setFormActive(r.active);
+    setFormAllowMultiple(r.allowMultipleRedemptions);
     setFormError('');
     setFormSuccess('');
   }
@@ -87,6 +90,7 @@ export default function GestorRecompensas() {
     setFormCost('');
     setFormQuantity('');
     setFormActive(true);
+    setFormAllowMultiple(false);
     setFormError('');
     setFormSuccess('');
   }
@@ -103,6 +107,7 @@ export default function GestorRecompensas() {
         cost: Number(formCost),
         quantity: Number(formQuantity),
         active: formActive,
+        allowMultipleRedemptions: formAllowMultiple,
       };
       if (editingId !== null) {
         await api.patch(`/rewards/${editingId}`, payload);
@@ -291,6 +296,20 @@ export default function GestorRecompensas() {
               </label>
             </div>
 
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '24px' }}>
+              <input
+                type="checkbox"
+                id="formAllowMultiple"
+                checked={formAllowMultiple}
+                onChange={(e) => setFormAllowMultiple(e.target.checked)}
+                disabled={submitting}
+                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+              />
+              <label htmlFor="formAllowMultiple" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                Resgate múltiplo
+              </label>
+            </div>
+
             <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
               <button
                 type="submit"
@@ -333,6 +352,7 @@ export default function GestorRecompensas() {
                     <th style={thStyle}>Total</th>
                     <th style={thStyle}>Resgatadas</th>
                     <th style={thStyle}>Restantes</th>
+                    <th style={thStyle}>Resgate múltiplo</th>
                     <th style={thStyle}>Status</th>
                     <th style={thStyle}></th>
                   </tr>
@@ -352,6 +372,20 @@ export default function GestorRecompensas() {
                         <td style={tdStyle}>{r.redeemed}</td>
                         <td style={{ ...tdStyle, fontWeight: 600, color: r.remaining === 0 ? 'var(--danger)' : 'var(--success)' }}>
                           {r.remaining}
+                        </td>
+                        <td style={tdStyle}>
+                          <span
+                            style={{
+                              fontSize: '12px',
+                              fontWeight: 600,
+                              padding: '3px 8px',
+                              borderRadius: '99px',
+                              background: r.allowMultipleRedemptions ? '#ede9fe' : '#f1f5f9',
+                              color: r.allowMultipleRedemptions ? '#6d28d9' : '#64748b',
+                            }}
+                          >
+                            {r.allowMultipleRedemptions ? 'Sim' : 'Não'}
+                          </span>
                         </td>
                         <td style={tdStyle}>
                           <span
