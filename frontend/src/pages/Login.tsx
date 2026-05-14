@@ -52,8 +52,16 @@ export default function Login() {
   }
 
   return (
-    <div className="page-center">
-      <div className="login-box">
+    <div
+      className="page-center"
+      style={{
+        backgroundImage: 'url("/login gamatec.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="login-box" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.35)' }}>
         <div>
           <p className="app-name">GamaTec</p>
           <h1>Login</h1>

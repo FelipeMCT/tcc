@@ -14,10 +14,12 @@ import FuncionarioHistorico from './pages/FuncionarioHistorico';
 import FuncionarioPerfil from './pages/FuncionarioPerfil';
 import FuncionarioFeedback from './pages/FuncionarioFeedback';
 import ProtectedRoute from './routes/ProtectedRoute';
+import ThemeToggle from './components/ThemeToggle';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeToggle />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
